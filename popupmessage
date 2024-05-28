@@ -1,0 +1,13 @@
+# Pop-up message
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.MessageBox]::Show("
+
+ [🔓❌]
+ 
+ Config File
+ 
+You are not a Global Admin.Sorry!
+
+Closing this app❗
+ 
+ ")
