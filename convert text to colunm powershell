@@ -1,0 +1,36 @@
+Add-Type -AssemblyName Microsoft.Office.Interop.Excel
+
+$inputFile = $PSScriptRoot + 'rawtext.txt'
+$csvFile = $PSScriptRoot + 'rawtext.csv'
+$excelFile = $PSScriptRoot + 'rawtext.xlsx'
+
+# Create a datatable
+$dt = New-Object system.Data.DataTable
+[void]$dt.Columns.Add('EPOS', [string]::empty.GetType())
+[void]$dt.Columns.Add('SKU', [string]::empty.GetType())
+[void]$dt.Columns.Add('QTY', [string]::empty.GetType())
+[void]$dt.Columns.Add('ReferenceNr', [string]::empty.GetType())
+
+# Loop through the file
+foreach ($line in [System.IO.File]::ReadLines($inputFile)) {
+    if ($line -match '^\d+') {
+        $contentArray = $line -split ' +'
+        $newRow = $dt.NewRow()
+        $newRow.EPOS = $contentArray[0]
+        $newRow.SKU = $contentArray[1]
+        $newRow.QTY = $contentArray[2]
+        $newRow.ReferenceNr = $contentArray[3]
+        [void]$dt.Rows.Add($newRow)
+    }
+}
+
+# Export to CSV
+$dt | Export-Csv $csvFile -Encoding UTF8 -Delimiter ';' -NoTypeInformation
+
+# Create Excel file
+$excel = New-Object -ComObject Excel.Application
+$excel.Visible = $false
+$excel.DisplayAlerts = $false
+[void]$excel.Workbooks.Open($csvFile).SaveAs($excelFile, [Microsoft.Office.Interop.Excel.XlFileFormat]::xlWorkbookDefault)
+[void]$excel.Workbooks.Close()
+[void]$excel.Quit()
