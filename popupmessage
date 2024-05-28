@@ -11,3 +11,39 @@ You are not a Global Admin.Sorry!
 Closing this app❗
  
  ")
+
+function Show-Menu {
+    param (
+        [string]$Title = 'Main Menu'
+    )
+    Clear-Host
+    Write-Host "================ $Title ================"
+    Write-Host "1: Press '1' for Option 1."
+    Write-Host "2: Press '2' for Option 2."
+    Write-Host "3: Press '3' for Option 3."
+    Write-Host "Q: Press 'Q' to quit."
+}
+
+do {
+    Show-Menu -Title 'My Interactive Menu'
+    $selection = Read-Host "Please make a selection"
+    switch ($selection) {
+        '1' {
+            # Your code for Option 1
+            Write-Host "You chose Option 1"
+        }
+        '2' {
+            # Your code for Option 2
+            Write-Host "You chose Option 2"
+        }
+        '3' {
+            # Your code for Option 3
+            Write-Host "You chose Option 3"
+        }
+        'Q' {
+            return
+        }
+    }
+    pause # Wait for user to acknowledge before re-displaying menu
+}
+until ($selection -eq 'Q')
